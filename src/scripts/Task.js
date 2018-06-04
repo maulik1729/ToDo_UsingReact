@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 
 const Task = (props) => {
-    const linepresent=(props.task.isDone&&props.currentState=='All')?"tasklist__text tasklist__text--checked":"tasklist__text";
+    const linepresent=(props.task.isDone)?"tasklist__text tasklist__text--checked":"tasklist__text";
     return ( 
         <li className="tasklist__task">
             <span className="tasklist__item tasklist--done" data-id={props.task.id} onClick={props.onComplete}>&#10004;</span>
@@ -14,7 +14,6 @@ const Task = (props) => {
 }
 
 Task.propTypes={
-    currentState:PropTypes.string.isRequired,
     task:PropTypes.object.isRequired,
     onComplete:PropTypes.func.isRequired,
     onDelete:PropTypes.func.isRequired,
