@@ -23,7 +23,16 @@ class Input extends React.Component{
 
     render(){
         return (
-            <input className="todo__taketask" type="text" onKeyDown={this.handleInput} onChange={this.handleChange} value={this.state.value} placeholder="Enter Task" autoComplete="off" required/>
+            <input 
+                className="todo__taketask" 
+                type="text" 
+                onKeyDown={this.handleInput} 
+                onChange={this.handleChange} 
+                value={this.state.value} 
+                placeholder="Enter Task" 
+                autoComplete="off" 
+                required
+            />
         );
     }
 }

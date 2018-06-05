@@ -18,7 +18,7 @@ class ToDo extends React.Component{
         this.count=0;
     }
 
-    handleInput=(value)=>{
+    handleInput= (value) => {                      
         const curTasks=this.state.tasks;
         const newTask={id:(++this.count),task:value,isDone:false};
         const updatedTasks=[...curTasks,newTask];
@@ -27,7 +27,7 @@ class ToDo extends React.Component{
         });
     }
 
-    handleComplete=(e)=>{
+    handleComplete= (e) => {
         const curTasks=this.state.tasks;
         const index=curTasks.findIndex((task)=>task.id==e.target.dataset.id);
         const task=curTasks[index];
@@ -38,36 +38,35 @@ class ToDo extends React.Component{
         });
     }   
 
-    handleDelete=(e)=>{
+    handleDelete= (e) => {
         const curTasks=this.state.tasks;
         const index=curTasks.findIndex((task)=>task.id==e.target.dataset.id);
         if(index==-1)
             return;
-        //console.log(index+" "+e.target.dataset.id);
         const updatedTasks=[...curTasks.slice(0,index),...curTasks.slice(index+1)];
         this.setState({
             tasks:updatedTasks
         });
     }
 
-    handleCurrentState=(e)=>{
+    handleCurrentState= (e) => {
         this.setState({currentState:e.target.dataset.name});
         const filters=Array.from(e.target.parentElement.children);
         filters.forEach((filter)=>filter.classList.remove("filter__item--dark"));
         e.target.classList.add("filter__item--dark");
     }
 
-    handleClearButton=(e)=>{
+    handleClearButton= (e) => {
         const updatedTasks=this.state.tasks.filter(task=>!task.isDone);
         this.setState({tasks:updatedTasks});
     }
 
-    handleEditing=(e)=>{
+    handleEditing= (e) => {
         e.target.classList.add("tasklist__text--dark");
         e.target.contentEditable=true;
     }
 
-    handleSave=(e)=>{
+    handleSave= (e) => {
         if(e.key!="Enter")
             return;
         const curTasks=this.state.tasks;
@@ -79,24 +78,39 @@ class ToDo extends React.Component{
         e.target.contentEditable=false;
     }
 
-    handleMarkAllComplete =(e)=>{
+    handleMarkAllComplete= (e) => {
         const curTasks=this.state.tasks;
         const updatedTasks=curTasks.map(task => Object.assign({},task,{isDone:true}));
         this.setState({tasks:updatedTasks});
     } 
 
-    render(){
+    countOfNotCompleted= () => {
         const curTasks=this.state.tasks;
         const countOfCompleted=curTasks.reduce((count,task)=> (task.isDone)?count+1:count , 0);
         const countOfNotCompleted=curTasks.length-countOfCompleted;
+    }
+
+    render(){
+        const {tasks,currentState} = this.state;
+        const countOfNotCompleted=this.countOfNotCompleted();
         return (
             <div className="todo">
                 <Header heading="To Do List"/>
-                <TaskList tasks={this.state.tasks} currentState={this.state.currentState} onDoubleClick={this.handleEditing} onKeyPress={this.handleSave} onComplete={this.handleComplete} onDelete={this.handleDelete}/>
-                <Input value={this.state.input} onChange={this.handleChange} onEnter={this.handleInput}/>
+                <TaskList 
+                    tasks={tasks} 
+                    currentState={currentState} 
+                    onDoubleClick={this.handleEditing} 
+                    onKeyPress={this.handleSave} 
+                    onComplete={this.handleComplete} 
+                    onDelete={this.handleDelete}
+                />
+                <Input  onEnter={this.handleInput}/>
                 <Filter onClick={this.handleCurrentState}/>
-                <RemaingTask onClick={this.handleMarkAllComplete} countOfNotCompleted={countOfNotCompleted}/>
-                {countOfCompleted>0?<ClearCompleted onClick={this.handleClearButton}/>:null}
+                <RemaingTask 
+                    onClick={this.handleMarkAllComplete} 
+                    countOfNotCompleted={countOfNotCompleted}
+                />
+                {(tasks.length-countOfNotCompleted)>0?<ClearCompleted onClick={this.handleClearButton}/>:null}
             </div>
         );
     }

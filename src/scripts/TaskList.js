@@ -7,12 +7,8 @@ import { Transition, animated } from 'react-spring'
 
 
 const TaskList= (props) => {
-        const tasks=props.tasks.filter((task)=>{
-            if(task.isDone&&props.currentState=='Active')
-                return false;
-            if(!task.isDone&&props.currentState=='Completed')  
-                return false;
-            return true;            
+        const tasks=props.tasks.filter(task=>{
+            return (!(task.isDone&&props.currentState=='Active')||(!task.isDone&&props.currentState=='Completed'))
         });
         return (
             <ul className="tasklist">
@@ -23,7 +19,17 @@ const TaskList= (props) => {
                     leave={{opacity:0,height:0,border:0,padding:0}}>
                     {
                         tasks.map( task => styles =>{
-                            return (<Task style={styles} task={task} key={task.id} currentState={props.currentState} onComplete={props.onComplete} onDelete={props.onDelete} onDoubleClick={props.onDoubleClick} onKeyPress={props.onKeyPress}/>);
+                            return (
+                                <Task 
+                                    style={styles} 
+                                    task={task} 
+                                    key={task.id} 
+                                    currentState={props.currentState} 
+                                    onComplete={props.onComplete} 
+                                    onDelete={props.onDelete} 
+                                    onDoubleClick={props.onDoubleClick} 
+                                    onKeyPress={props.onKeyPress}
+                                />);
                         })
                     }
                 </Transition>
