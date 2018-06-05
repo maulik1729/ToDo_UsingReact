@@ -20,7 +20,7 @@ class ToDo extends React.Component{
 
     handleInput=(value)=>{
         const curTasks=this.state.tasks;
-        const newTask={id:++this.count,task:value,isDone:false};
+        const newTask={id:(++this.count),task:value,isDone:false};
         const updatedTasks=[...curTasks,newTask];
         this.setState({
             tasks:updatedTasks
@@ -41,6 +41,9 @@ class ToDo extends React.Component{
     handleDelete=(e)=>{
         const curTasks=this.state.tasks;
         const index=curTasks.findIndex((task)=>task.id==e.target.dataset.id);
+        if(index==-1)
+            return;
+        //console.log(index+" "+e.target.dataset.id);
         const updatedTasks=[...curTasks.slice(0,index),...curTasks.slice(index+1)];
         this.setState({
             tasks:updatedTasks
