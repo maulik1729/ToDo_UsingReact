@@ -45,6 +45,7 @@ class ToDo extends React.Component{
             const index=curTasks.findIndex((task)=>task.id==id);
             const toggleTask=response;
             const updatedTasks=[...curTasks.slice(0,index),toggleTask,...curTasks.slice(index+1)];
+            console.log(updatedTasks);
             this.setState({
                 tasks:updatedTasks
             });
@@ -52,7 +53,6 @@ class ToDo extends React.Component{
     }   
 
     handleDelete= (e) => {
-        console.log(e.target.dataset.id);
         const id=e.target.dataset.id;
         controller.removeTask(id).then((response)=>{
             const curTasks=this.state.tasks;
@@ -74,8 +74,10 @@ class ToDo extends React.Component{
     }
 
     handleClearButton= (e) => {
-        const updatedTasks=this.state.tasks.filter(task=>!task.isDone);
-        this.setState({tasks:updatedTasks});
+        controller.removeCompletedTask().then((response) =>{
+            const updatedTasks=this.state.tasks.filter(task=>!task.isDone);
+            this.setState({tasks:updatedTasks});
+        })
     }
 
     handleEditing= (e) => {

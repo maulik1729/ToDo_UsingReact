@@ -7,31 +7,44 @@ import controller from "./js/controller";
 
 
 class MainView extends React.Component{
+    constructor(){
+        super();
+        this.state={
+            view:"vanillJS"
+        }
+    }
     componentDidMount(){
         controller.changeDatabase("LocalStorage");
         vanillaJSView.init();
     }
     handleView= (e) => {
-        if(e.target.textContent=="React")
+        console.log("x");
+        if(e.target.textContent!="React")
             ReactDOM.render(<App/>,document.querySelector(".container"));
         else
         {
             ReactDOM.unmountComponentAtNode(document.querySelector(".container"));
-             vanillaJSView.init();
+            vanillaJSView.init();
         }
 
     }
 
     handleDatabase= (e) => {
-        controller.changeDatabase(String(e.target.textContent));
-        vanillaJSView.init();
+        if(e.target.textContent!="JSDB")
+            controller.changeDatabase("JSDB");
+        else
+            controller.changeDatabase("LocalStorage");
+        if(this.state.view=="React")
+            ReactDOM.render(<App/>,document.querySelector(".container"));
+        else
+            vanillaJSView.init();
     }
 
     render(){
         return (
             <React.Fragment>
                 <Button one="React" two="vanillaJS" onClick={this.handleView}/>
-                <Button one="LocalStorage" two="JSDB" onClick={this.handleDatabase}/>
+                <Button one="JSDB" two="LocalStorage" onClick={this.handleDatabase}/>
             </React.Fragment>
         );
     }

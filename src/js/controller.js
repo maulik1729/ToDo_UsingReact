@@ -5,6 +5,7 @@ var controller = {
 
     changeDatabase:(type)=>{
         this.database=DatabaseFactory.makeDatabase(type);
+        console.log(this.database);
         controller.getId();
     },
 
@@ -30,11 +31,7 @@ var controller = {
 
     removeCompletedTask:()=>{
         var taskToDo=this.database.getAllTask().then((response)=>{
-            return response.map(task => {
-                if(task.isDone)
-                    return this.database.removeTask(task.id);
-                return
-            });
+            return Promise.all(response.filter(task => task.isDone).map((task) => this.database.removeTask(task.id)));
         });
        return taskToDo;
     },
@@ -51,7 +48,6 @@ var controller = {
         this.database.getAllTask().then((response)=> {
             this.count=response.reduce((curMax, {id}) => Math.max(curMax, id), -1)+1;
         });
-
     }
 }
 

@@ -7,9 +7,16 @@ import { Transition, animated } from 'react-spring'
 
 
 const TaskList= (props) => {
-        const tasks=props.tasks.filter(task=>{
-            return (!(task.isDone&&props.currentState=='Active')||(!task.isDone&&props.currentState=='Completed'))
+        const tasks=props.tasks.filter( task => {
+            if(task.isDone&&props.currentState=='Active')
+                return false;
+            if(!task.isDone&&props.currentState=='Completed')
+                return false;
+            return true;
         });
+        console.log(props.currentState);
+        console.log(tasks);
+        console.log("x");
         return (
             <ul className="tasklist">
                 <Transition

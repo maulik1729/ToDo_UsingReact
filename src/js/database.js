@@ -75,7 +75,7 @@ class LocalStorage extends DataBase{
             }
             curTasks[index].isDone=!curTasks[index].isDone;
             localStorage[this.key]=JSON.stringify(curTasks);
-            resolve(curTasks[index].isDone);
+            resolve(curTasks[index]);
         });
 
     }
@@ -97,7 +97,7 @@ class JSDB extends DataBase{
             xhr.open(request.method, request.url,true);
             xhr.onload = function () {
                 if (this.status >= 200 && this.status < 300) {
-                    resolve(xhr.response);
+                    resolve(JSON.parse(xhr.response));
                 } else {
                     reject({
                         status: this.status,
@@ -162,7 +162,7 @@ class JSDB extends DataBase{
     updateTask(id,newTask) {
         return this.get(this.key + "/" + id).then(
             (response) => {
-                const curTask = JSON.parse(response);
+                const curTask = response;
                 curTask.task = newTask;
                 return this.put(curTask, this.key + "/" + curTask.id);
             }
@@ -171,7 +171,7 @@ class JSDB extends DataBase{
     markTaskComplete(id){
         return this.get(this.key + "/" + id).then(
             (response) => {
-                const curTask = JSON.parse(response);
+                const curTask = response;
                 curTask.isDone = !curTask.isDone;
                 return this.put(curTask, this.key + "/" + curTask.id);
             }

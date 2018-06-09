@@ -78,11 +78,12 @@ var vanillaJSView={
     render:function() {
         const currentState = vanillaJSView.currentState;
         controller.getAllTasks().then((response)=>{
+            console.log(response);
             this.jtasks.innerHTML=response.filter(task => !(currentState == "Active" && task.isDone)&&!(currentState == "Completed" && !task.isDone))
             .map((task) => {
                 const linepresent=(task.isDone?"tasklist__text tasklist__text--checked":"tasklist__text");
                 return`
-                    <li class="tasklist__task">
+                    <li class="tasklist__task" padding="100px">
                         <span class="tasklist__item tasklist--done" data-index="${task.id}">&#10004</span>
                         <span class="${linepresent}" for="${task.id}"  data-index="${task.id}">${task.task}</span>  
                         <span class="tasklist__item tasklist--remove" data-index="${task.id}">X</span>
@@ -104,7 +105,9 @@ var vanillaJSView={
     },
 
     handleClearCompletedButton:function(){
-
+        controller.removeCompletedTask().then(
+            () => vanillaJSView.render()
+        );
     },
 
     enableEditMode:function(e) {

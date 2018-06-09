@@ -4,16 +4,20 @@ class Button extends  React.Component{
     constructor(props){
         super(props);
         this.state={
-            value:this.props.one
+            value:this.props.two
         };
     }
     handleClick= (e) => {
-        this.setState({value:(this.state.value==this.props.one)?this.props.two:this.props.one});
         this.props.onClick(e);
+        this.setState((prevState)=>{
+           return {value:(prevState.value==this.props.two)?this.props.one:this.props.two}
+        });
     }
     render(){
+        console.log("render");
         return (<span onClick={this.handleClick}>{this.state.value}</span>);
     }
+
 }
 
 export default Button;

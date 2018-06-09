@@ -7,18 +7,22 @@ html {
     box-sizing: inherit;
 }
 
-.buttons{
+.mainView{
     position: fixed;
+    display: flex;
+    right: 0px;
 }
 
-.buttons span{
+.mainView span{
     display: inline-block;
-    height: 40px;
-    width: 100px;
+    height: 45px;
+    width: 120px;
     background: white;
     padding: 10px;
     text-align: center;
-    margin: 5px;
+    margin: 6px;
+    cursor: pointer;
+    border: 3px solid black;
 }
 
 .container{
@@ -61,6 +65,7 @@ html {
 
 .tasklist__task{
     display: flex;
+    padding:12px;
     border-bottom: 1px solid rgba(14, 6, 6, 0.2);
 }
 
