@@ -7,45 +7,62 @@ import Input from './Input.js';
 import Filter from './Filter.js';
 import ClearCompleted from './ClearCompleted.js';
 import RemaingTask from './RemaingTask.js';
+import controller from "../../js/controller";
 
 class ToDo extends React.Component{
     constructor(props){
         super(props);
+        this.count=0;
         this.state={
             tasks:[],
-            currentState:"All"
-        };
-        this.count=0;
+            currentState:'All',
+        }
+    }
+    componentWillMount= () => {
+        controller.getAllTasks().then((response) => {
+            console.log(response);
+            this.setState({
+                tasks: response,
+            });
+        });
     }
 
-    handleInput= (value) => {                      
-        const curTasks=this.state.tasks;
-        const newTask={id:(++this.count),task:value,isDone:false};
-        const updatedTasks=[...curTasks,newTask];
-        this.setState({
-            tasks:updatedTasks
+    handleInput= (value) => {
+        controller.addTask(value).then((response) => {
+            const curTasks = this.state.tasks;
+            const newTask = response;
+            const updatedTasks = [...curTasks, newTask];
+            this.setState({
+                tasks: updatedTasks
+            });
         });
     }
 
     handleComplete= (e) => {
-        const curTasks=this.state.tasks;
-        const index=curTasks.findIndex((task)=>task.id==e.target.dataset.id);
-        const task=curTasks[index];
-        const toggleTask=Object.assign({},task,{isDone:!task.isDone});
-        const updatedTasks=[...curTasks.slice(0,index),toggleTask,...curTasks.slice(index+1)];
-        this.setState({
-            tasks:updatedTasks
+        const id=e.target.dataset.id;
+        controller.markTaskComplete(id).then((response)=>{
+            const curTasks=this.state.tasks;
+            const index=curTasks.findIndex((task)=>task.id==id);
+            const toggleTask=response;
+            const updatedTasks=[...curTasks.slice(0,index),toggleTask,...curTasks.slice(index+1)];
+            this.setState({
+                tasks:updatedTasks
+            });
         });
     }   
 
     handleDelete= (e) => {
-        const curTasks=this.state.tasks;
-        const index=curTasks.findIndex((task)=>task.id==e.target.dataset.id);
-        if(index==-1)
-            return;
-        const updatedTasks=[...curTasks.slice(0,index),...curTasks.slice(index+1)];
-        this.setState({
-            tasks:updatedTasks
+        console.log(e.target.dataset.id);
+        const id=e.target.dataset.id;
+        controller.removeTask(id).then((response)=>{
+            const curTasks=this.state.tasks;
+            const index=curTasks.findIndex((task)=>task.id==id);
+            if(index==-1)
+                return;
+            const updatedTasks=[...curTasks.slice(0,index),...curTasks.slice(index+1)];
+            this.setState({
+                tasks:updatedTasks
+            });
         });
     }
 
@@ -69,25 +86,29 @@ class ToDo extends React.Component{
     handleSave= (e) => {
         if(e.key!="Enter")
             return;
-        const curTasks=this.state.tasks;
-        const index=curTasks.findIndex((task)=>task.id==e.target.dataset.id);
-        const task=curTasks[index];
-        const newTask=Object.assign({},task,{task:e.target.textContent});
-        const updatedTasks=[...curTasks.slice(0,index),newTask,...curTasks.slice(index+1)];
-        this.setState({tasks:updatedTasks});
-        e.target.contentEditable=false;
+        const id=e.target.dataset.id;
+        const text=e.target.textContent;
+        controller.changeTask(id,text).then( (response) => {
+            const curTasks = this.state.tasks;
+            const index = curTasks.findIndex((task) => task.id == id);
+            const newTask = response;
+            const updatedTasks = [...curTasks.slice(0, index), newTask, ...curTasks.slice(index + 1)];
+            this.setState({tasks: updatedTasks});
+        });
+        e.target.contentEditable = false;
     }
 
-    handleMarkAllComplete= (e) => {
+   /* handleMarkAllComplete= (e) => {
         const curTasks=this.state.tasks;
         const updatedTasks=curTasks.map(task => Object.assign({},task,{isDone:true}));
         this.setState({tasks:updatedTasks});
-    } 
+    } */
 
     countOfNotCompleted= () => {
         const curTasks=this.state.tasks;
         const countOfCompleted=curTasks.reduce((count,task)=> (task.isDone)?count+1:count , 0);
         const countOfNotCompleted=curTasks.length-countOfCompleted;
+        return countOfNotCompleted;
     }
 
     render(){
@@ -106,10 +127,6 @@ class ToDo extends React.Component{
                 />
                 <Input  onEnter={this.handleInput}/>
                 <Filter onClick={this.handleCurrentState}/>
-                <RemaingTask 
-                    onClick={this.handleMarkAllComplete} 
-                    countOfNotCompleted={countOfNotCompleted}
-                />
                 {(tasks.length-countOfNotCompleted)>0?<ClearCompleted onClick={this.handleClearButton}/>:null}
             </div>
         );

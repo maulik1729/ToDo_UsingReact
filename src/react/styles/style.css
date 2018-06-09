@@ -7,6 +7,20 @@ html {
     box-sizing: inherit;
 }
 
+.buttons{
+    position: fixed;
+}
+
+.buttons span{
+    display: inline-block;
+    height: 40px;
+    width: 100px;
+    background: white;
+    padding: 10px;
+    text-align: center;
+    margin: 5px;
+}
+
 .container{
     background: url("../images/a.jpg") center;
     background-size:cover;
@@ -17,6 +31,7 @@ html {
     min-height: 100vh;
     font-family: 'Shadows Into Light', cursive;
 }
+
 
 .todo{
       background: white;

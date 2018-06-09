@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles/normalize.css';
-import './styles/style.css';
-import App from './scripts/App.js';
+import './react/styles/normalize.css';
+import './react/styles/style.css';
+import App from './react/scripts/App.js';
+import mainView from './mainView';
 
-ReactDOM.render(<App/>,document.querySelector(".app"));
