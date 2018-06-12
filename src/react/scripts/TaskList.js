@@ -14,9 +14,6 @@ const TaskList= (props) => {
                 return false;
             return true;
         });
-        console.log(props.currentState);
-        console.log(tasks);
-        console.log("x");
         return (
             <ul className="tasklist">
                 <Transition

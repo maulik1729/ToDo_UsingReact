@@ -20,11 +20,20 @@ class ToDo extends React.Component{
     }
     componentWillMount= () => {
         controller.getAllTasks().then((response) => {
-            console.log(response);
             this.setState({
                 tasks: response,
             });
         });
+    }
+    componentWillReceiveProps= (nextProps) => {
+        if(nextProps.database!=this.props.database)
+        {
+            controller.getAllTasks().then((response) => {
+                this.setState({
+                    tasks: response,
+                });
+            });
+        }
     }
 
     handleInput= (value) => {
@@ -45,7 +54,6 @@ class ToDo extends React.Component{
             const index=curTasks.findIndex((task)=>task.id==id);
             const toggleTask=response;
             const updatedTasks=[...curTasks.slice(0,index),toggleTask,...curTasks.slice(index+1)];
-            console.log(updatedTasks);
             this.setState({
                 tasks:updatedTasks
             });

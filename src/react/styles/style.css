@@ -7,22 +7,22 @@ html {
     box-sizing: inherit;
 }
 
-.mainView{
+.mainView__buttons{
     position: fixed;
     display: flex;
-    right: 0px;
+    right: 0;
+
 }
 
-.mainView span{
+.mainView__item{
     display: inline-block;
-    height: 45px;
-    width: 120px;
+    text-align: center;
+    margin: 5px;
     background: white;
     padding: 10px;
-    text-align: center;
-    margin: 6px;
+    border: 2px solid rgba(0, 0, 0, 0.2);
     cursor: pointer;
-    border: 3px solid black;
+    width: 150px;
 }
 
 .container{

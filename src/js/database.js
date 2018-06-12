@@ -1,22 +1,34 @@
 class DataBase {
-    addTask(Task){}
-    getAllTask(){}
-    updateTask(id,newTask){}
-    removeTask(id){}
-    markTaskComplete(id){}
+    addTask(Task) {
+    }
+
+    getAllTask() {
+    }
+
+    updateTask(id, newTask) {
+    }
+
+    removeTask(id) {
+    }
+
+    markTaskComplete(id) {
+    }
 
 }
-class LocalStorage extends DataBase{
-    constructor(){
+
+class LocalStorage extends DataBase {
+    constructor() {
         super();
-        this.key="taskToDo";
-        localStorage[this.key]=localStorage[this.key]?localStorage[this.key]:JSON.stringify([]);
+        this.key = "taskToDo";
+        localStorage[this.key] = localStorage[this.key] ? localStorage[this.key] : JSON.stringify([]);
     }
-    addTask(Task){
-        return new Promise((resolve,reject)=> {
-            if(localStorage[this.key]) {
+
+    addTask(Task) {
+        return new Promise((resolve, reject) => {
+            if (localStorage[this.key]) {
                 var curTasks = JSON.parse(localStorage[this.key]);
                 curTasks.push(Task);
+                console.log(curTasks);
                 localStorage[this.key] = JSON.stringify(curTasks);
                 resolve(Task);
             }
@@ -24,33 +36,36 @@ class LocalStorage extends DataBase{
                 reject("Key Not Available");
         });
     }
-    getAllTask(){
-        return new Promise((resolve,reject) =>{
-            if(localStorage[this.key]) {
+
+    getAllTask() {
+        return new Promise((resolve, reject) => {
+            if (localStorage[this.key]) {
                 var curTasks = JSON.parse(localStorage[this.key]);
                 resolve(curTasks);
-            }else
+            } else
                 reject("Key Not Available");
         });
 
     }
-    updateTask(id,newTask){
-        return new Promise((resolve,reject)=>{
-            if(!localStorage[this.key])
+
+    updateTask(id, newTask) {
+        return new Promise((resolve, reject) => {
+            if (!localStorage[this.key]) //common out
                 reject("Key Not Available");
-            var curTasks=JSON.parse(localStorage[this.key]);
-            var index = curTasks.findIndex((task)=>task.id==id);
-            if(index==-1){
+            var curTasks = JSON.parse(localStorage[this.key]);
+            var index = curTasks.findIndex((task) => task.id == id);
+            if (index == -1) {
                 return reject("Not a valid id");
             }
             curTasks[index].task = newTask;
-            localStorage[this.key]=JSON.stringify(curTasks);
+            localStorage[this.key] = JSON.stringify(curTasks);
             resolve(curTasks[index]);
         });
 
     }
-    removeTask(id){
-        return new Promise((resolve,reject)=> {
+
+    removeTask(id) {
+        return new Promise((resolve, reject) => {
             if (!localStorage[this.key])
                 reject("Key Not Available");
             var curTasks = JSON.parse(localStorage[this.key]);
@@ -64,17 +79,18 @@ class LocalStorage extends DataBase{
         });
 
     }
-    markTaskComplete(id){
-        return new Promise((resolve,reject)=>{
-            if(!localStorage[this.key])
+
+    markTaskComplete(id) {
+        return new Promise((resolve, reject) => {
+            if (!localStorage[this.key])
                 reject("Key Not Available");
-            var curTasks=JSON.parse(localStorage[this.key]);
-            var index = curTasks.findIndex((task)=>task.id==id);
-            if(index==-1){
+            var curTasks = JSON.parse(localStorage[this.key]);
+            var index = curTasks.findIndex((task) => task.id == id);
+            if (index == -1) {
                 return reject("Not a valid id");
             }
-            curTasks[index].isDone=!curTasks[index].isDone;
-            localStorage[this.key]=JSON.stringify(curTasks);
+            curTasks[index].isDone = !curTasks[index].isDone;
+            localStorage[this.key] = JSON.stringify(curTasks);
             resolve(curTasks[index]);
         });
 
@@ -82,22 +98,24 @@ class LocalStorage extends DataBase{
 }
 
 
-class JSDB extends DataBase{
-    constructor(){
+class JSDB extends DataBase {
+    constructor() {
         super();
-        this.url = "http://localhost:3000/";
-        this.key="taskToDo";
-        this.headers={
+        this.url = "http://localhost:4000/";
+        this.key = "taskToDo";
+        this.headers = {
             'Content-type': 'application/json'
         }
     }
+
     makeRequest(request) {
         return new Promise((resolve, reject) => {
             var xhr = new XMLHttpRequest();
-            xhr.open(request.method, request.url,true);
+            xhr.open(request.method, request.url, true);
             xhr.onload = function () {
                 if (this.status >= 200 && this.status < 300) {
                     resolve(JSON.parse(xhr.response));
+
                 } else {
                     reject({
                         status: this.status,
@@ -116,50 +134,56 @@ class JSDB extends DataBase{
                     xhr.setRequestHeader(key, this.headers[key]);
                 });
             }
-            if(request.data) {
+            if (request.data) {
                 xhr.send(JSON.stringify(request.data));
-            }else
+            } else
                 xhr.send();
         });
     }
 
-    get(key=this.key){
+    get(key = this.key) {
         return this.makeRequest({
-            method:"GET",
-            url:this.url+key
+            method: "GET",
+            url: this.url + key
         });
     }
 
-    post(data,key=this.key){
+    post(data, key = this.key) {
         return this.makeRequest({
-            method:"POST",
-            url:this.url+key,
+            method: "POST",
+            url: this.url + key,
             data: data,
         })
     }
-    put(data,key=this.key){
+
+    put(data, key = this.key) {
         return this.makeRequest({
-            method:"PUT",
-            url:this.url+key,
+            method: "PUT",
+            url: this.url + key,
             data: data,
         })
     }
-    delete(id,key=this.key){
+
+    delete(id, key = this.key) {
         return this.makeRequest({
-            method:"DELETE",
-            url:this.url+key
+            method: "DELETE",
+            url: this.url + key
         })
     }
-    addTask(Task){
+
+    addTask(Task) {
         return this.post(Task);
     }
-    getAllTask(){
+
+    getAllTask() {
         return this.get();
     }
-    removeTask(id){
-        return this.delete(id,this.key+"/"+id);
+
+    removeTask(id) {
+        return this.delete(id, this.key + "/" + id);
     }
-    updateTask(id,newTask) {
+
+    updateTask(id, newTask) {
         return this.get(this.key + "/" + id).then(
             (response) => {
                 const curTask = response;
@@ -168,7 +192,8 @@ class JSDB extends DataBase{
             }
         );
     }
-    markTaskComplete(id){
+
+    markTaskComplete(id) {
         return this.get(this.key + "/" + id).then(
             (response) => {
                 const curTask = response;
@@ -180,16 +205,16 @@ class JSDB extends DataBase{
 }
 
 
-export default class DataBaseFactory{
-    static makeDatabase(type){
-        switch(type){
+export default class DataBaseFactory {
+    static makeDatabase(type) {
+        switch (type) {
             case "JSDB":
             {
-                console.log("xx"+type);
-                return new JSDB();
-            }
+                console.log("jsdb");
+              return new JSDB();}
             case "LocalStorage":
                 return new LocalStorage();
+
         }
     }
 }
