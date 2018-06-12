@@ -10,32 +10,39 @@ class MainView extends React.Component{
     constructor(){
         super();
         this.state={
-            view:"vanillJS"
+            view:"vanillaJS",
+            database:"LocalStorage"
         }
     }
     componentDidMount(){
         controller.changeDatabase("LocalStorage");
         vanillaJSView.init();
     }
-    handleView= (e) => {
-        console.log("x");
-        if(e.target.textContent!="React")
+    handleView= () => {
+        if(this.state.view!="React") {
             ReactDOM.render(<App/>,document.querySelector(".container"));
-        else
-        {
+            this.setState({view: "React"});
+        }else {
             ReactDOM.unmountComponentAtNode(document.querySelector(".container"));
             vanillaJSView.init();
+            this.setState({view: "vanillaJS"});
         }
 
     }
 
-    handleDatabase= (e) => {
-        if(e.target.textContent!="JSDB")
+    handleDatabase= () => {
+        if(this.state.database!="JSDB") {
             controller.changeDatabase("JSDB");
-        else
+            this.setState({database:"JSDB"});
+        }
+        else {
             controller.changeDatabase("LocalStorage");
-        if(this.state.view=="React")
-            ReactDOM.render(<App/>,document.querySelector(".container"));
+            this.setState({database:"LocalStorage"});
+        }
+        if(this.state.view=="React") {
+            ReactDOM.unmountComponentAtNode(document.querySelector(".container"));
+            ReactDOM.render(<App/>, document.querySelector(".container"));
+        }
         else
             vanillaJSView.init();
     }
@@ -43,8 +50,8 @@ class MainView extends React.Component{
     render(){
         return (
             <React.Fragment>
-                <Button one="React" two="vanillaJS" onClick={this.handleView}/>
-                <Button one="JSDB" two="LocalStorage" onClick={this.handleDatabase}/>
+                <Button value={this.state.view} onClick={this.handleView}/>
+                <Button value={this.state.database} onClick={this.handleDatabase}/>
             </React.Fragment>
         );
     }

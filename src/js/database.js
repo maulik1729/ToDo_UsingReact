@@ -85,7 +85,7 @@ class LocalStorage extends DataBase{
 class JSDB extends DataBase{
     constructor(){
         super();
-        this.url = "http://localhost:3000/";
+        this.url = "http://localhost:3009/";
         this.key="taskToDo";
         this.headers={
             'Content-type': 'application/json'
@@ -98,6 +98,7 @@ class JSDB extends DataBase{
             xhr.onload = function () {
                 if (this.status >= 200 && this.status < 300) {
                     resolve(JSON.parse(xhr.response));
+
                 } else {
                     reject({
                         status: this.status,
@@ -184,10 +185,7 @@ export default class DataBaseFactory{
     static makeDatabase(type){
         switch(type){
             case "JSDB":
-            {
-                console.log("xx"+type);
                 return new JSDB();
-            }
             case "LocalStorage":
                 return new LocalStorage();
         }

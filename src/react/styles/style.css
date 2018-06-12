@@ -13,7 +13,7 @@ html {
     right: 0px;
 }
 
-.mainView span{
+.mainView__item{
     display: inline-block;
     height: 45px;
     width: 120px;
@@ -22,7 +22,7 @@ html {
     text-align: center;
     margin: 6px;
     cursor: pointer;
-    border: 3px solid black;
+    border: 3px solid rgba(0,0,0,0.5);
 }
 
 .container{
