@@ -1,11 +1,10 @@
-import  DatabaseFactory from './database.js'
+import  DatabaseFactory from '../database/databaseFactory.js'
 var database;
 
 var controller = {
 
     changeDatabase:(type)=>{
         database=DatabaseFactory.makeDatabase(type);
-        console.log(database);
         controller.getId();
     },
 

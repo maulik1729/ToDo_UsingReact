@@ -8,9 +8,7 @@ function handleTaskAdd(e){
     const newTask=this.value;
     if(newTask=="")
         return;
-    controller.addTask(newTask).then(()=>{
-        render()
-    });
+    controller.addTask(newTask).then(()=>{render()});
     this.value="";
 }
 
@@ -19,7 +17,6 @@ function handleActiveTab(e){
     jfilter_items.forEach((jfilter_item)=> jfilter_item.classList.remove("filter__item--dark"));
     this.classList.add("filter__item--dark");
     render();
-    console.log(currentState);
 }
 
 function handleToggle(e){
@@ -79,7 +76,7 @@ function enableEditMode(e){
     if(!e.target.matches("span"))
         return;
     this.classList.add("tasklist__text--dark");
-    this.contentEditable=true;
+    e.target.contentEditable=true;
 }
 
 function disableEditMode(e){
