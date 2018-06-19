@@ -1,12 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
 import Header from './Header.js';
 import TaskList from './TaskList.js';
 import Input from './Input.js';
 import Filter from './Filter.js';
 import ClearCompleted from './ClearCompleted.js';
-import RemaingTask from './RemaingTask.js';
 import controller from "../../js/controller";
 
 class ToDo extends React.Component{
