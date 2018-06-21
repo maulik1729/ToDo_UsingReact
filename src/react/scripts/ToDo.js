@@ -1,13 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
 import Header from './Header.js';
 import TaskList from './TaskList.js';
 import Input from './Input.js';
 import Filter from './Filter.js';
 import ClearCompleted from './ClearCompleted.js';
-import RemaingTask from './RemaingTask.js';
 import controller from "../../js/controller";
+import {ALL} from '../../constants/state'
+import {countOfNotCompleted} from "./selectors";
 
 class ToDo extends React.Component{
     constructor(props){
@@ -15,7 +14,7 @@ class ToDo extends React.Component{
         this.count=0;
         this.state={
             tasks:[],
-            currentState:'All',
+            currentState:ALL,
         }
     }
     componentWillMount= () => {
@@ -74,11 +73,8 @@ class ToDo extends React.Component{
         });
     }
 
-    handleCurrentState= (e) => {
-        this.setState({currentState:e.target.dataset.name});
-        const filters=Array.from(e.target.parentElement.children);
-        filters.forEach((filter)=>filter.classList.remove("filter__item--dark"));
-        e.target.classList.add("filter__item--dark");
+    handleCurrentState= (newState) => {
+        this.setState({currentState:newState});
     }
 
     handleClearButton= (e) => {
@@ -108,22 +104,9 @@ class ToDo extends React.Component{
         e.target.contentEditable = false;
     }
 
-   /* handleMarkAllComplete= (e) => {
-        const curTasks=this.state.tasks;
-        const updatedTasks=curTasks.map(task => Object.assign({},task,{isDone:true}));
-        this.setState({tasks:updatedTasks});
-    } */
-
-    countOfNotCompleted= () => {
-        const curTasks=this.state.tasks;
-        const countOfCompleted=curTasks.reduce((count,task)=> (task.isDone)?count+1:count , 0);
-        const countOfNotCompleted=curTasks.length-countOfCompleted;
-        return countOfNotCompleted;
-    }
-
     render(){
         const {tasks,currentState} = this.state;
-        const countOfNotCompleted=this.countOfNotCompleted();
+        const countOfNotComplete=countOfNotCompleted(this.state.tasks);
         return (
             <div className="todo">
                 <Header heading="To Do List"/>
@@ -136,8 +119,8 @@ class ToDo extends React.Component{
                     onDelete={this.handleDelete}
                 />
                 <Input  onEnter={this.handleInput}/>
-                <Filter onClick={this.handleCurrentState}/>
-                {(tasks.length-countOfNotCompleted)>0?<ClearCompleted onClick={this.handleClearButton}/>:null}
+                <Filter onClick={this.handleCurrentState} currentState={this.state.currentState}/>
+                {(tasks.length-countOfNotComplete)>0?<ClearCompleted onClick={this.handleClearButton}/>:null}
             </div>
         );
     }
