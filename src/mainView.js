@@ -1,57 +1,49 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import vanillaJSView from './js/vanillaJSView';
 import App from './react/scripts/App.js';
 import Button from './react/scripts/Button';
 import controller from "./js/controller";
-
+import {REACT_VIEW,JS_VIEW} from "./constants/view";
+import {JSDB,LOCALSTORAGE} from "./constants/database";
+import JS from "./react/scripts/JS";
 
 class MainView extends React.Component{
     constructor(){
         super();
         this.state={
-            view:"vanillaJS",
-            database:"LocalStorage"
+            view:JS_VIEW,
+            database:LOCALSTORAGE
         }
     }
-    componentDidMount(){
-        controller.changeDatabase("LocalStorage");
-        vanillaJSView.init();
+    componentWillMount = () =>{
+        controller.changeDatabase(this.state.database);
     }
-    handleView= () => {
-        if(this.state.view!="React") {
-            ReactDOM.render(<App/>,document.querySelector(".container"));
-            this.setState({view: "React"});
-        }else {
-            ReactDOM.unmountComponentAtNode(document.querySelector(".container"));
-            vanillaJSView.init();
-            this.setState({view: "vanillaJS"});
-        }
 
+    handleView= () => {
+        if(this.state.view==JS_VIEW)
+        {
+          const container=document.body.querySelector(".container");
+          container.innerHTML="";
+        }
+        this.setState({view:this.state.view==JS_VIEW?REACT_VIEW:JS_VIEW});
     }
 
     handleDatabase= () => {
-        if(this.state.database!="JSDB") {
-            controller.changeDatabase("JSDB");
-            this.setState({database:"JSDB"});
-        }
-        else {
-            controller.changeDatabase("LocalStorage");
-            this.setState({database:"LocalStorage"});
-        }
-        if(this.state.view=="React") {
-            ReactDOM.unmountComponentAtNode(document.querySelector(".container"));
-            ReactDOM.render(<App/>, document.querySelector(".container"));
-        }
-        else
-            vanillaJSView.init();
+        const database=this.state.database==JSDB?LOCALSTORAGE:JSDB;
+        this.setState({database});
+        controller.changeDatabase(database);
     }
 
     render(){
         return (
             <React.Fragment>
-                <Button value={this.state.view} onClick={this.handleView}/>
-                <Button value={this.state.database} onClick={this.handleDatabase}/>
+                <div className="mainView__buttons">
+                     <Button value={this.state.view} onClick={this.handleView}/>
+                     <Button value={this.state.database} onClick={this.handleDatabase}/>
+                </div>
+                <div className="container">
+                    {this.state.view==JS_VIEW?<JS/>:<App database={this.state.database}/>}
+                </div>
             </React.Fragment>
         );
     }

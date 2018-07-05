@@ -1,4 +1,4 @@
-import  DatabaseFactory from './database.js'
+import  DatabaseFactory from '../database/databaseFactory.js'
 var database;
 
 var controller = {

@@ -22,6 +22,16 @@ class ToDo extends React.Component{
             });
         });
     }
+    componentWillReceiveProps= (nextProps) => {
+        if(nextProps.database!=this.props.database)
+        {
+            controller.getAllTasks().then((response) => {
+                this.setState({
+                    tasks: response,
+                });
+            });
+        }
+    }
 
     handleInput= (value) => {
         controller.addTask(value).then((response) => {

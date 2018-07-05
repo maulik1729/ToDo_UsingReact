@@ -1,7 +1,6 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
-  "private": true,
+  "name": "my-app_todo",
+  "version": "2.0.1",
   "homepage": "https://maulik1729.github.io/ToDo_UsingReact/",
   "dependencies": {
     "json-server": "^0.13.0",

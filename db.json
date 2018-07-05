@@ -6,6 +6,7 @@
       "id": 1
     },
     {
+<<<<<<< HEAD
       "task": "sa",
       "isDone": false,
       "id": 2
@@ -39,6 +40,26 @@
       "task": "sa",
       "isDone": false,
       "id": 8
+=======
+      "task": "da",
+      "isDone": true,
+      "id": 69
+    },
+    {
+      "task": "SA",
+      "isDone": false,
+      "id": 74
+    },
+    {
+      "task": "da",
+      "isDone": false,
+      "id": 84
+    },
+    {
+      "task": "ad",
+      "isDone": false,
+      "id": 85
+>>>>>>> a6b3aab3328f9fc2cb010651f20d7c1af9f6de26
     }
   ]
 }
