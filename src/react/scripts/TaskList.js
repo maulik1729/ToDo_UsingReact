@@ -1,16 +1,14 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-
 import Task from './Task.js';
 import PropTypes from 'prop-types';
 import { Transition, animated } from 'react-spring'
-
+import {ACTIVE,COMPLETED} from "../../constants/state";
 
 const TaskList= (props) => {
         const tasks=props.tasks.filter( task => {
-            if(task.isDone&&props.currentState=='Active')
+            if(task.isDone&&props.currentState==ACTIVE)
                 return false;
-            if(!task.isDone&&props.currentState=='Completed')
+            if(!task.isDone&&props.currentState==COMPLETED)
                 return false;
             return true;
         });
